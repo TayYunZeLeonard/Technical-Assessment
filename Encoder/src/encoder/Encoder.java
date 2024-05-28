@@ -62,8 +62,8 @@ public class Encoder {
 		StringBuilder encodedSb = new StringBuilder();		
 		
 		//first char is the offset
-		//check for valid character belonging to the reference table or whitespace, eg. no lowercase letters, etc.
-		if (offset.toString().matches("[a-zA-Z0-9/(()*+,-./)\s]+")) {
+		//check for valid character belonging to the reference table
+		if (referenceTable.keySet().contains(Character.toUpperCase(offset))) {
 			encodedSb.append(Character.toUpperCase(offset));
 		}
 		else {
@@ -71,10 +71,10 @@ public class Encoder {
 		}
 		
 		for (int i = 0; i < plainText.length();i++) {
-			if (plainText.substring(i, i+1).equals(" ")) {//spaces should be added as is
-				encodedSb.append(" ");
+			if (plainText.substring(i, i+1).matches("\s")) {//spaces should be added as is
+				encodedSb.append(plainText.charAt(i));
 			}
-			else if (!plainText.substring(i, i+1).matches("[a-zA-Z0-9/(()*+,-./)]+")) {//if at any time encounter illegal characters
+			else if (!referenceTable.keySet().contains(Character.toUpperCase(plainText.charAt(i)))) {//if at any time encounter illegal characters
 				return "Invalid String";
 			}
 			else {
@@ -90,16 +90,16 @@ public class Encoder {
 		Character offset = Character.toUpperCase(encodedText.charAt(0)); 
 		
 		//first char is the offset
-		//check for valid character belonging to the reference table, eg. no lowercase letters, etc.
-		if (!offset.toString().matches("[A-Z0-9/(()*+,-./)]+")) {
+		//check for valid character belonging to the reference table
+		if (!referenceTable.keySet().contains(offset)) {
 			return "Invalid Offset";
 		}
 		
 		for (int i = 1; i < encodedText.length();i++) {//ignore first character because it is just encoding
-			if (encodedText.substring(i, i+1).equals(" ")) {//spaces should be added as is
-				encodedSb.append(" ");
+			if (encodedText.substring(i, i+1).matches("\s")) {//spaces should be added as is
+				encodedSb.append(encodedText.charAt(i));
 			}
-			else if (!encodedText.substring(i, i+1).matches("[a-zA-Z0-9/(()*+,-./)]+")) {//if at any time encounter illegal characters
+			else if (!referenceTable.keySet().contains(Character.toUpperCase(encodedText.charAt(i)))) {//if at any time encounter illegal characters
 				return "Invalid String";
 			}
 			else {
@@ -139,22 +139,30 @@ public class Encoder {
 		// Show HELLO WORLD, also further test with other offset
 		Encoder encoder = new Encoder();
 		
-		System.out.println(encoder.encode("HELLO WORLD")); //test default with 'B'
-		System.out.println(encoder.decode(encoder.encode("HELLO WORLD")));
+		//test default with 'B'
+		System.out.println("\"HELLO WORLD\", encode offset B	-> " + encoder.encode("HELLO WORLD"));
+		System.out.println("\""+encoder.encode("HELLO WORLD") + "\", decode		-> " + encoder.decode(encoder.encode("HELLO WORLD"))+"\n");
 		
-		System.out.println(encoder.encode("HELLO WORLD", 'F')); //test with 'F'
-		System.out.println(encoder.decode(encoder.encode("HELLO WORLD", 'F')));
+		//test with 'F'
+		System.out.println("\"HELLO WORLD\", encode offset F 	-> " + encoder.encode("HELLO WORLD", 'F')); 
+		System.out.println("\""+encoder.encode("HELLO WORLD", 'F') + "\", decode 		-> " + encoder.decode(encoder.encode("HELLO WORLD", 'F'))+"\n");
 		
-		System.out.println(encoder.encode("SOME OTHER STRING", '9')); //test with '9'
-		System.out.println(encoder.decode(encoder.encode("SOME OTHER STRING", '9')));
+		//test with '9'
+		System.out.println("\"SOME OTHER STRING\", encode offset 9 	-> " + encoder.encode("SOME OTHER STRING", '9')); 
+		System.out.println("\""+encoder.encode("SOME OTHER STRING", '9') + "\", decode 		-> " + encoder.decode(encoder.encode("SOME OTHER STRING", '9'))+"\n");
 		
-		System.out.println(encoder.encode("lower will become upper", '/')); //test lower case string, should convert to uppercase
-		System.out.println(encoder.decode(encoder.encode("lower will become upper", '/')));
+		//test lower case string, should convert to uppercase
+		System.out.println("\"lower will become upper\", encode offset /	-> " + encoder.encode("lower will become upper", '/')); 
+		System.out.println("\""+encoder.encode("lower will become upper", '/') + "\", decode 		-> " + encoder.decode(encoder.encode("lower will become upper", '/'))+"\n");
 		
-		System.out.println(encoder.encode("hello world", 'b')); //test with 'b', if offset was lower case
-		System.out.println(encoder.decode("bgdkkn vnqkc")); //test if an encoded message had lower case
+		//test with 'b', if offset was lower case
+		System.out.println("\"hello world\", encode offset b lower case test 	-> " + encoder.encode("hello world", 'b')); 
+		//test if an encoded message had lower case
+		System.out.println("\"bgdkkn vnqkc\"" + ", decode lower case test 		-> " + encoder.decode("bgdkkn vnqkc")+"\n"); 
 		
-		System.out.println(encoder.encode("^^^", 'B')); //test illegal string
-		System.out.println(encoder.encode("HELLO WORLD", '^')); //test illegal offset
+		//test illegal string
+		System.out.println("\"^^^\", encode offset B invalid string test 		-> " + encoder.encode("^^^", 'B')); 
+		//test illegal offset
+		System.out.println("\"HELLO WORLD\", encode offset ^ invalid offset test 	-> " + encoder.encode("HELLO WORLD", '^')); 
 	}
 }
