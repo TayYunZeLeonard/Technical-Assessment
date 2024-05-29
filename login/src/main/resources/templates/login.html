@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+	<head>
+		<title>Login Page</title>
+	</head>
+	<body>
+	<div style="text-align: right;padding:5px;margin:5px 0px;background:#ccc;">
+         <a th:href="@{/login?lang=en}" th:utext="#{label.English}"></a>
+         &nbsp;|&nbsp;
+         <a th:href="@{/login?lang=cn}" th:utext="#{label.SimplifiedChinese}"></a>
+      </div>
+	<div align="center">
+		<h1 th:utext ="#{label.title}"></h1>
+
+		<form th:action="@{/login}" method="post">
+			<div>
+			<input type="text" name="username" th:placeholder="#{label.userName}"/>
+			</div>
+			<div>
+			<input type="password" name="password" th:placeholder="#{label.password}"/>
+			</div>
+			<br>
+			<input type="submit" th:value="#{label.login}" />
+		</form>
+		<br>
+			<div th:if="${param.error}">
+				<span th:utext ="#{label.loginError}"></span>
+			</div>
+		</div>
+	</body>
+</html>

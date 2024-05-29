@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>welcomes</title>
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" />
+    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div style="text-align: right;padding:5px;margin:5px 0px;background:#ccc;">
+         <a th:href="@{/welcome?lang=en}" th:utext="#{label.English}"></a>
+         &nbsp;|&nbsp;
+         <a th:href="@{/welcome?lang=cn}" th:utext="#{label.SimplifiedChinese}"></a>
+      </div>
+<div class="container text-center">
+	<div>
+    	<h1 th:utext="#{label.welcome}"></h1>
+	</div>
+	<div>
+    	<h4 th:utext="#{label.details}"></h4>
+    	<span th:utext="#{label.name}"></span>: <span sec:authentication="principal.fullName"></span> <br>
+    	<span th:utext="#{label.userName}"></span>: <span sec:authentication="principal.username"></span> <br>
+    	<span th:utext="#{label.role}"></span>: <span sec:authentication="principal.role"></span> <br>
+    	<br>
+	</div>
+    <div sec:authorize="hasAuthority('MANAGER')">
+        <p><a th:href="@{/restricted}" th:utext="#{label.restricted}"></a></p>
+    </div>
+    <div>
+        <form th:action="@{/logout}" method="post">
+            <input type="submit" th:value="#{label.logout}" />
+        </form>
+    </div>
+</div>
+</body>
+</html>

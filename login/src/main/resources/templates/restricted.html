@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>welcomes</title>
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" />
+    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div style="text-align: right;padding:5px;margin:5px 0px;background:#ccc;">
+         <a th:href="@{/restricted?lang=en}" th:utext="#{label.English}"></a>
+         &nbsp;|&nbsp;
+         <a th:href="@{/restricted?lang=cn}" th:utext="#{label.SimplifiedChinese}"></a>
+      </div>
+<div class="container text-center">
+    <div>
+        <span  th:utext="#{label.restrictedMessage}"></span>
+    </div>
+    <div>
+        <form th:action="@{/welcome}" method="get">
+            <input type="submit" th:value="#{label.return}" />
+        </form>
+    </div>
+</div>
+</body>
+</html>
